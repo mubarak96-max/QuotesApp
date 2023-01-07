@@ -10,6 +10,8 @@ import BottomNav from './components/BottomNav';
 import Qoutes from './components/Qoutes';
 import { store } from './utils/redux/store';
 import QuoteDetails from './components/QuoteDetails';
+import MoreScreen from './screens/MoreScreen';
+import ContactScreen from './screens/ContactScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,24 +25,18 @@ export default function App() {
             component={HomeScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name='FavoritesScreen'
-            component={FavoritesScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name='AboutScreen'
-            component={AboutScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name='Quotes'
-            component={Qoutes}
-            options={{ headerShown: false }}
-          />
+          <Stack.Screen name='FavoritesScreen' component={FavoritesScreen} />
+          <Stack.Screen name='About' component={AboutScreen} />
+          <Stack.Screen name='Contact' component={ContactScreen} />
+          <Stack.Screen name='Quotes' component={Qoutes} />
           <Stack.Screen
             name='QuoteDetails'
             component={QuoteDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='More'
+            component={MoreScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

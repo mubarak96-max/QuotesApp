@@ -5,31 +5,32 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'tailwind-react-native-classnames';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const Qoutes = () => {
-  const { quotes } = useSelector((state) => state.quotes);
+  const { quotes, categories } = useSelector((state) => state.quotes);
   const navigation = useNavigation();
-  //   console.log(quotes);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: categories[0]?.category.toUpperCase()
+    });
+  }, [navigation]);
+
+  console.log(categories[0]?.category);
+
   return (
-    <SafeAreaView style={tw`mt-8`}>
-      <View
-        style={tw`flex-row justify-between px-3 bg-green-600 h-8 items-center mx-4`}
-      >
-        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
-          <Entypo name='chevron-left' size={30} color='white' />
-        </TouchableOpacity>
-        <Text style={tw`text-white text-xl font-semibold`}>Quotes</Text>
-      </View>
+    <SafeAreaView style={tw`mt-1`}>
       <ScrollView>
-        {quotes?.map((item, index) => {
-          const { author, category, quote, commentary } = item;
+        {categories?.map((item, index) => {
+          const { author, category, quote, commentary, id } = item;
           return (
             <TouchableOpacity
+              key={id}
               style={tw`flex-row  mx-4 my-3 items-center`}
               onPress={() => navigation.navigate('QuoteDetails', { item })}
             >

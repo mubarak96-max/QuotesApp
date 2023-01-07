@@ -25,7 +25,7 @@ const BottomNav = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={tw`justify-center items-center`}
-        onPress={() => navigation.navigate('AboutScreen')}
+        onPress={() => navigation.navigate('More')}
       >
         <MaterialIcons name='more-vert' size={24} color='white' />
         <Text style={tw`text-white text-base`}>More</Text>

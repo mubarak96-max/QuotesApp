@@ -2,6 +2,7 @@ import {
   Confidence,
   Finance,
   MentalStrength,
+  Morality,
   Relationships,
   SelfControl,
   Spirituality
@@ -15,8 +16,8 @@ export const categoriesData = [
   },
   {
     id: '23bc',
-    title: 'confidence',
-    image: Confidence
+    title: 'morality',
+    image: Morality
   },
   {
     id: '34ab',
