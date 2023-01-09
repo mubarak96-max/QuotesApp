@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import tw from 'tailwind-react-native-classnames';
 import { StatusBar } from 'expo-status-bar';
-import { collection, onSnapshot, where, query } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { categoriesData } from '../assets/categoriesData';
@@ -18,8 +18,6 @@ import { useEffect } from 'react';
 import { db } from '../firebase';
 
 const HomeScreen = () => {
-  const { quotes } = useSelector((state) => state.quotes);
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -32,7 +30,6 @@ const HomeScreen = () => {
         snapshot.forEach((doc) => {
           quotesArr.push(doc.data());
 
-          // console.log('quotesArr', quotesArr);
           dispatch(setQuotes([...quotesArr]));
         });
       });

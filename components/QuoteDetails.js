@@ -17,15 +17,10 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  addFavorite,
-  removeFavorite,
-  setFavorites
-} from '../utils/redux/slices/quotesSlice';
+import { setFavorites } from '../utils/redux/slices/quotesSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const QuoteDetails = ({ route }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
   const data = route?.params;
   const { author, category, commentary, quote } = data?.item;
   const navigation = useNavigation();
@@ -57,7 +52,6 @@ const QuoteDetails = ({ route }) => {
       const arrayString = await AsyncStorage.getItem('myFavorites');
       if (arrayString) {
         dispatch(setFavorites(JSON.parse(arrayString)));
-        // return console.log(JSON.parse(arrayString));
       } else {
         return [];
       }

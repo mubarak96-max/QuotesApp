@@ -5,10 +5,9 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'tailwind-react-native-classnames';
-import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const Qoutes = () => {
