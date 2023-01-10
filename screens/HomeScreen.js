@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import tw from 'tailwind-react-native-classnames';
 import { StatusBar } from 'expo-status-bar';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { categoriesData } from '../assets/categoriesData';
@@ -24,9 +24,10 @@ const HomeScreen = () => {
   useEffect(() => {
     try {
       const col = collection(db, 'quotes');
+      const q = query(col, orderBy('timestamp', 'desc'));
       let quotesArr = [];
 
-      onSnapshot(col, { includeMetadataChanges: true }, (snapshot) => {
+      onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
         snapshot.forEach((doc) => {
           quotesArr.push(doc.data());
 

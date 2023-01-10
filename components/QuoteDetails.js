@@ -15,7 +15,6 @@ import {
 } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFavorites } from '../utils/redux/slices/quotesSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';

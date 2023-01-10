@@ -11,7 +11,7 @@ import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from '@react-navigation/native';
 
 const Qoutes = () => {
-  const { quotes, categories } = useSelector((state) => state.quotes);
+  const { categories } = useSelector((state) => state.quotes);
   const navigation = useNavigation();
 
   useLayoutEffect(() => {
@@ -20,13 +20,11 @@ const Qoutes = () => {
     });
   }, [navigation]);
 
-  console.log(categories[0]?.category);
-
   return (
     <SafeAreaView style={tw`mt-1`}>
       <ScrollView>
         {categories?.map((item, index) => {
-          const { author, category, quote, commentary, id } = item;
+          const { quote, id } = item;
           return (
             <TouchableOpacity
               key={id}
