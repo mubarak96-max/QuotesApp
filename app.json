@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "QuotesApp",
+    "name": "Islamic Mental Models",
     "slug": "QuotesApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,18 +14,26 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.mubarak96.QuotesApp"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a89d0b15-25da-467e-a775-51a37f727ee9"
+      }
     }
   }
 }
