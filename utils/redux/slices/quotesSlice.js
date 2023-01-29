@@ -3,13 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   quotes: [],
   categories: [],
-  favorites: []
+  favorites: [],
+  loading: false
 };
 
 export const quotesSlice = createSlice({
   name: 'quotes',
   initialState,
   reducers: {
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
     setQuotes: (state, action) => {
       state.quotes = action.payload;
     },
@@ -40,6 +44,7 @@ export const quotesSlice = createSlice({
 });
 
 export const {
+  setLoading,
   setQuotes,
   setFavorites,
   addFavorite,

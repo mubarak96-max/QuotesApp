@@ -6,84 +6,38 @@ import {
   TouchableOpacity,
   Image
 } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import tw from 'tailwind-react-native-classnames';
 import { StatusBar } from 'expo-status-bar';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import * as FileSystem from 'expo-file-system';
+import { useDispatch } from 'react-redux';
 import { categoriesData } from '../assets/categoriesData';
 import { setCategory, setQuotes } from '../utils/redux/slices/quotesSlice';
 import { useEffect } from 'react';
-import { db } from '../firebase';
+import firestore from '@react-native-firebase/firestore';
 
 const HomeScreen = () => {
-  const { quotes } = useSelector((state) => state.quotes);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [quotesList, setQuotesList] = useState([]);
 
   useEffect(() => {
-    try {
-      const col = collection(db, 'quotes');
-      const q = query(col, orderBy('timestamp', 'desc'));
-      let quotesArr = [];
+    firestore()
+      .collection('quotes')
+      .get()
+      .then((querySnapshot) => {
+        const pac = [];
 
-      onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
-        snapshot.forEach((doc) => {
-          quotesArr.push(doc.data());
+        querySnapshot.forEach((documentSnapshot) => {
+          pac.push({ id: documentSnapshot.id, ...documentSnapshot.data() });
         });
 
-        async function saveDataToFileSystem(data) {
-          try {
-            await FileSystem.writeAsStringAsync(
-              `${FileSystem.documentDirectory}myData.json`,
-              JSON.stringify(data)
-            );
-            console.log('wrote data', JSON.parse(data));
-          } catch (e) {
-            console.log('Error saving data to file system', e);
-          }
-        }
-
-        async function readDataFromFileSystem() {
-          try {
-            const data = await FileSystem.readAsStringAsync(
-              `${FileSystem.documentDirectory}myData.json`
-            );
-            console.log('read data', JSON.parse(data));
-            let uniqueQuotes = [...new Set(JSON.parse(data))];
-
-            dispatch(setQuotes(uniqueQuotes));
-            return uniqueQuotes;
-          } catch (e) {
-            console.log('Error reading data from file system', e);
-          }
-        }
-
-        async function updateDataInFileSystem(newData) {
-          try {
-            const existingData = await readDataFromFileSystem();
-            const updatedData = { ...existingData, ...newData };
-            await FileSystem.writeAsStringAsync(
-              `${FileSystem.documentDirectory}myData.json`,
-              JSON.stringify(updatedData)
-            );
-          } catch (e) {
-            console.log('Error updating data in file system', e);
-          }
-        }
-
-        saveDataToFileSystem(quotesArr);
-        updateDataInFileSystem(quotesArr);
-        readDataFromFileSystem();
-
-        // console.log('new quotes', quotes);
+        setQuotes(pac);
+        dispatch(setQuotes(pac));
+        // console.log('new query', pac);
+      })
+      .catch(() => {
+        // console.log(error);
       });
-    } catch (error) {
-      console.log(error);
-    }
   }, []);
 
   return (
@@ -102,7 +56,10 @@ const HomeScreen = () => {
             }}
           >
             <View style={tw`bg-white rounded-3xl`}>
-              <Image source={item.image} style={{ width: 70, height: 70 }} />
+              <Image
+                source={item.image}
+                style={{ width: 65, height: 65, resizeMode: 'contain' }}
+              />
             </View>
 
             <Text style={tw`text-base mt-2 text-white capitalize font-bold`}>

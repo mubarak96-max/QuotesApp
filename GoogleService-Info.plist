@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>338085357319-69frl2rquf834o22tkau7h49hv14qdbs.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.338085357319-69frl2rquf834o22tkau7h49hv14qdbs</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAlVliEQ4xUN1idwTOnaDBHh5EoQCFhquo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>338085357319</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.mubarak96.QuotesApp</string>
+	<key>PROJECT_ID</key>
+	<string>qurancms-ecf1e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>qurancms-ecf1e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:338085357319:ios:270799500daaefc9f807a2</string>
+	<key>DATABASE_URL</key>
+	<string>https://qurancms-ecf1e-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

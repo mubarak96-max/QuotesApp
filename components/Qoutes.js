@@ -28,7 +28,7 @@ const Qoutes = () => {
           return (
             <TouchableOpacity
               key={id}
-              style={tw`flex-row  mx-4 my-3 items-center`}
+              style={tw`flex-row  mx-1 mr-5 my-2 px-2 items-center`}
               onPress={() => navigation.navigate('QuoteDetails', { item })}
             >
               <View
@@ -39,7 +39,7 @@ const Qoutes = () => {
                 </Text>
               </View>
 
-              <Text style={tw`text-base`}>
+              <Text style={tw`text-base -ml-3 pr-16`}>
                 {quote?.length > 80 ? `${quote.slice(0, 80)}...` : quote}
               </Text>
             </TouchableOpacity>

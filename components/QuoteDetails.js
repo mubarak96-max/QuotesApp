@@ -88,6 +88,43 @@ const QuoteDetails = ({ route }) => {
     getArray();
   }, []);
 
+  async function addFavorite(array, item) {
+    let exists = false;
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].id === item.id) {
+        exists = true;
+        break;
+      }
+    }
+    if (exists) {
+      ToastAndroid.show('Already exists in favorite', ToastAndroid.SHORT);
+    } else {
+      // array.push(item);
+      addItem(item);
+      ToastAndroid.show('Add to favorites successfully!', ToastAndroid.SHORT);
+      // dispatch(setFavorites(item));
+      console.log('fav', favorites);
+    }
+  }
+
+  function removeItem(array, id) {
+    let indexToRemove;
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].id === id) {
+        indexToRemove = i;
+        break;
+      }
+    }
+    if (indexToRemove !== undefined) {
+      array.splice(indexToRemove, 1);
+      alert('Item removed!');
+    } else {
+      alert('Item not found!');
+    }
+  }
+
+  // removeItem(myArray, idToRemove);
+
   return (
     <SafeAreaView style={tw`mt-8 `}>
       <View style={tw`flex-row justify-between mx-6`}>
@@ -103,19 +140,7 @@ const QuoteDetails = ({ route }) => {
           <TouchableOpacity
             style={tw`flex-row items-center ml-4`}
             onPress={async () => {
-              if (!favorites.includes(data.item)) {
-                await addItem(data?.item);
-                ToastAndroid.show(
-                  'Add to favorites successfully!',
-                  ToastAndroid.SHORT
-                );
-                getArray();
-              } else {
-                ToastAndroid.show(
-                  'Already exists in favorite',
-                  ToastAndroid.SHORT
-                );
-              }
+              addFavorite(favorites, data?.item);
             }}
           >
             <MaterialIcons name='library-add' size={26} color='black' />
@@ -137,7 +162,7 @@ const QuoteDetails = ({ route }) => {
         </View>
       </View>
 
-      <ScrollView>
+      <ScrollView style={tw`mb-6`}>
         <View style={tw`bg-blue-100 py-3 px-3 mt-3 mx-4 rounded-md shadow-xl`}>
           <Text style={tw`text-green-900 text-lg`}>{quote}</Text>
         </View>
@@ -147,7 +172,9 @@ const QuoteDetails = ({ route }) => {
         >
           {author}
         </Text>
-        <Text style={tw`mx-4 my-5 text-pink-900 text-base`}>{commentary}</Text>
+        <Text style={tw`mx-4 my-5 mb-6 text-pink-900 text-base`}>
+          {commentary}
+        </Text>
       </ScrollView>
     </SafeAreaView>
   );

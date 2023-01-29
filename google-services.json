@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "338085357319",
+    "firebase_url": "https://qurancms-ecf1e-default-rtdb.firebaseio.com",
+    "project_id": "qurancms-ecf1e",
+    "storage_bucket": "qurancms-ecf1e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338085357319:android:223e5699c9679b51f807a2",
+        "android_client_info": {
+          "package_name": "com.mubarak96.QuotesApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "338085357319-qd5kd76jf5mt3os3o31o4fihpmjv7suq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpMsdkXPkKJ2y_5nidqSKh-O-Z1hVtDtQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "338085357319-qd5kd76jf5mt3os3o31o4fihpmjv7suq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
