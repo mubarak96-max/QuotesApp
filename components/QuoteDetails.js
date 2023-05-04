@@ -18,6 +18,29 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFavorites } from '../utils/redux/slices/quotesSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  InterstitialAd,
+  AdEventType,
+  RewardedAd,
+  RewardedAdEventType,
+  BannerAd,
+  BannerAdSize
+} from 'react-native-google-mobile-ads';
+import { useState } from 'react';
+
+const interstitial = InterstitialAd.createForAdRequest(
+  'ca-app-pub-8237514940582521/9356958145',
+  {
+    requestNonPersonalizedAdsOnly: true
+  }
+);
+
+const rewarded = RewardedAd.createForAdRequest(
+  'ca-app-pub-8237514940582521/2408406414',
+  {
+    requestNonPersonalizedAdsOnly: true
+  }
+);
 
 const QuoteDetails = ({ route }) => {
   const data = route?.params;
@@ -25,6 +48,68 @@ const QuoteDetails = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { favorites } = useSelector((state) => state.quotes);
+
+  //reward ads
+
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const unsubscribeLoaded = rewarded.addAdEventListener(
+      RewardedAdEventType.LOADED,
+      () => {
+        setLoaded(true);
+      }
+    );
+    const unsubscribeEarned = rewarded.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      (reward) => {
+        console.log('User earned reward of ', reward);
+      }
+    );
+
+    // Start loading the rewarded ad straight away
+    rewarded.load();
+
+    // Unsubscribe from events on unmount
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+    };
+  }, []);
+
+  //interstitial ads
+
+  const [adLoaded, setAdLoaded] = useState(false);
+
+  const loadInterstitial = () => {
+    const unsubscribeLoading = interstitial.addAdEventListener(
+      AdEventType.LOADED,
+      () => {
+        setAdLoaded(true);
+      }
+    );
+
+    const unsubscribeClosed = interstitial.addAdEventListener(
+      AdEventType.CLOSED,
+      () => {
+        setAdLoaded(false);
+        interstitial.load();
+      }
+    );
+
+    interstitial.load();
+
+    return () => {
+      unsubscribeClosed();
+      unsubscribeLoading();
+    };
+  };
+
+  useEffect(() => {
+    const unsubscribeInterstitialEvent = loadInterstitial();
+
+    return unsubscribeInterstitialEvent;
+  }, []);
 
   async function addItem(item) {
     try {
@@ -99,31 +184,10 @@ const QuoteDetails = ({ route }) => {
     if (exists) {
       ToastAndroid.show('Already exists in favorite', ToastAndroid.SHORT);
     } else {
-      // array.push(item);
       addItem(item);
       ToastAndroid.show('Add to favorites successfully!', ToastAndroid.SHORT);
-      // dispatch(setFavorites(item));
-      console.log('fav', favorites);
     }
   }
-
-  function removeItem(array, id) {
-    let indexToRemove;
-    for (let i = 0; i < array.length; i++) {
-      if (array[i].id === id) {
-        indexToRemove = i;
-        break;
-      }
-    }
-    if (indexToRemove !== undefined) {
-      array.splice(indexToRemove, 1);
-      alert('Item removed!');
-    } else {
-      alert('Item not found!');
-    }
-  }
-
-  // removeItem(myArray, idToRemove);
 
   return (
     <SafeAreaView style={tw`mt-8 `}>
@@ -141,6 +205,7 @@ const QuoteDetails = ({ route }) => {
             style={tw`flex-row items-center ml-4`}
             onPress={async () => {
               addFavorite(favorites, data?.item);
+              interstitial.show();
             }}
           >
             <MaterialIcons name='library-add' size={26} color='black' />
@@ -149,8 +214,9 @@ const QuoteDetails = ({ route }) => {
             style={tw`flex-row items-center ml-4`}
             onPress={async () => {
               await removeFromArray(data?.item);
-              getArray();
+              await getArray();
               ToastAndroid.show('Removed from favorites', ToastAndroid.SHORT);
+              rewarded.show();
             }}
           >
             <MaterialCommunityIcons
@@ -164,7 +230,7 @@ const QuoteDetails = ({ route }) => {
 
       <ScrollView style={tw`mb-6`}>
         <View style={tw`bg-blue-100 py-3 px-3 mt-3 mx-4 rounded-md shadow-xl`}>
-          <Text style={tw`text-green-900 text-lg`}>{quote}</Text>
+          <Text style={tw`text-green-900 text-xl`}>"{quote}"</Text>
         </View>
         <Text style={tw`text-gray-400 ml-4 mt-2 capitalize`}>#{category}</Text>
         <Text
@@ -172,9 +238,20 @@ const QuoteDetails = ({ route }) => {
         >
           {author}
         </Text>
-        <Text style={tw`mx-4 my-5 mb-6 text-pink-900 text-base`}>
-          {commentary}
-        </Text>
+
+        <View style={tw`mx-4 my-5 mb-6 `}>
+          <Text style={tw`text-gray-600 text-lg`}>Commentary</Text>
+          <Text style={tw`text-pink-900 text-base`}>{commentary}</Text>
+        </View>
+        <View style={tw`mb-3`}>
+          <BannerAd
+            unitId='ca-app-pub-8237514940582521/6183999893'
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true
+            }}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

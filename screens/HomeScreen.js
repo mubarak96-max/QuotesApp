@@ -33,11 +33,8 @@ const HomeScreen = () => {
 
         setQuotes(pac);
         dispatch(setQuotes(pac));
-        // console.log('new query', pac);
       })
-      .catch(() => {
-        // console.log(error);
-      });
+      .catch(() => {});
   }, []);
 
   return (
@@ -47,8 +44,10 @@ const HomeScreen = () => {
         data={categoriesData}
         keyExtractor={(item) => item.id}
         numColumns={2}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <TouchableOpacity
+            activeOpacity={8}
             style={tw`w-36 p-6 my-5 items-center justify-center bg-blue-800 mx-3 rounded-2xl`}
             onPress={() => {
               dispatch(setCategory(item?.title));
@@ -71,5 +70,7 @@ const HomeScreen = () => {
     </SafeAreaView>
   );
 };
+
+const bannerId = 'ca-app-pub-8237514940582521/6183999893';
 
 export default HomeScreen;

@@ -1,10 +1,10 @@
-import { View, Text } from 'react-native';
+import { Text, ScrollView } from 'react-native';
 import React from 'react';
 import tw from 'tailwind-react-native-classnames';
 
 const AboutScreen = () => {
   return (
-    <View style={tw`px-3 py-5`}>
+    <ScrollView style={tw`px-3 py-1`}>
       <Text style={tw`py-2 text-xl font-semibold text-blue-500 italic`}>
         Our minds are constantly fed with lots and lots of information. This all
         influences our beliefs and attitude towards ourselves, fellow humans
@@ -23,7 +23,7 @@ const AboutScreen = () => {
       <Text style={tw`text-xl font-semibold text-blue-500 italic`}>
         This app was developed by Mutesasira Mubarak
       </Text>
-    </View>
+    </ScrollView>
   );
 };
 

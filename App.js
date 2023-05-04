@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
@@ -12,6 +11,8 @@ import { store } from './utils/redux/store';
 import QuoteDetails from './components/QuoteDetails';
 import MoreScreen from './screens/MoreScreen';
 import ContactScreen from './screens/ContactScreen';
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
+import tw from 'tailwind-react-native-classnames';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,15 @@ export default function App() {
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
+        <View style={tw`my-2`}>
+          <BannerAd
+            unitId='ca-app-pub-8237514940582521/6183999893'
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true
+            }}
+          />
+        </View>
         <BottomNav />
       </NavigationContainer>
     </Provider>

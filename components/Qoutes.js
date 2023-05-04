@@ -27,6 +27,7 @@ const Qoutes = () => {
           const { quote, id } = item;
           return (
             <TouchableOpacity
+              activeOpacity={8}
               key={id}
               style={tw`flex-row  mx-1 mr-5 my-2 px-2 items-center`}
               onPress={() => navigation.navigate('QuoteDetails', { item })}
