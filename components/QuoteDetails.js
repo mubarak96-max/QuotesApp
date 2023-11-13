@@ -5,19 +5,19 @@ import {
   ScrollView,
   TouchableOpacity,
   ToastAndroid
-} from 'react-native';
-import React, { useEffect } from 'react';
-import tw from 'tailwind-react-native-classnames';
+} from "react-native";
+import React, { useEffect } from "react";
+import tw from "tailwind-react-native-classnames";
 import {
   Entypo,
   MaterialCommunityIcons,
   MaterialIcons
-} from '@expo/vector-icons';
+} from "@expo/vector-icons";
 
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { setFavorites } from '../utils/redux/slices/quotesSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { setFavorites } from "../utils/redux/slices/quotesSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   InterstitialAd,
   AdEventType,
@@ -25,18 +25,18 @@ import {
   RewardedAdEventType,
   BannerAd,
   BannerAdSize
-} from 'react-native-google-mobile-ads';
-import { useState } from 'react';
+} from "react-native-google-mobile-ads";
+import { useState } from "react";
 
 const interstitial = InterstitialAd.createForAdRequest(
-  'ca-app-pub-8237514940582521/9356958145',
+  "ca-app-pub-8237514940582521/9356958145",
   {
     requestNonPersonalizedAdsOnly: true
   }
 );
 
 const rewarded = RewardedAd.createForAdRequest(
-  'ca-app-pub-8237514940582521/2408406414',
+  "ca-app-pub-8237514940582521/2408406414",
   {
     requestNonPersonalizedAdsOnly: true
   }
@@ -63,7 +63,7 @@ const QuoteDetails = ({ route }) => {
     const unsubscribeEarned = rewarded.addAdEventListener(
       RewardedAdEventType.EARNED_REWARD,
       (reward) => {
-        console.log('User earned reward of ', reward);
+        console.log("User earned reward of ", reward);
       }
     );
 
@@ -114,7 +114,7 @@ const QuoteDetails = ({ route }) => {
   async function addItem(item) {
     try {
       // Get the current array from AsyncStorage
-      const currentArray = await AsyncStorage.getItem('myFavorites');
+      const currentArray = await AsyncStorage.getItem("myFavorites");
       let array = [];
       if (currentArray) {
         // Parse the string value into a JavaScript array
@@ -125,7 +125,7 @@ const QuoteDetails = ({ route }) => {
       array.push(item);
 
       // Save the updated array back to AsyncStorage
-      await AsyncStorage.setItem('myFavorites', JSON.stringify(array));
+      await AsyncStorage.setItem("myFavorites", JSON.stringify(array));
     } catch (error) {
       console.error(error);
     }
@@ -133,7 +133,7 @@ const QuoteDetails = ({ route }) => {
 
   async function getArray() {
     try {
-      const arrayString = await AsyncStorage.getItem('myFavorites');
+      const arrayString = await AsyncStorage.getItem("myFavorites");
       if (arrayString) {
         dispatch(setFavorites(JSON.parse(arrayString)));
       } else {
@@ -148,7 +148,7 @@ const QuoteDetails = ({ route }) => {
   async function removeFromArray(item) {
     try {
       // Get the current array from AsyncStorage
-      const currentArray = await AsyncStorage.getItem('myFavorites');
+      const currentArray = await AsyncStorage.getItem("myFavorites");
       let array = [];
       if (currentArray) {
         // Parse the string value into a JavaScript array
@@ -163,7 +163,7 @@ const QuoteDetails = ({ route }) => {
       dispatch(setFavorites(array));
 
       // Save the updated array back to AsyncStorage
-      await AsyncStorage.setItem('myFavorites', JSON.stringify(array));
+      await AsyncStorage.setItem("myFavorites", JSON.stringify(array));
     } catch (error) {
       console.error(error);
     }
@@ -182,10 +182,10 @@ const QuoteDetails = ({ route }) => {
       }
     }
     if (exists) {
-      ToastAndroid.show('Already exists in favorite', ToastAndroid.SHORT);
+      ToastAndroid.show("Already exists in favorite", ToastAndroid.SHORT);
     } else {
       addItem(item);
-      ToastAndroid.show('Add to favorites successfully!', ToastAndroid.SHORT);
+      ToastAndroid.show("Add to favorites successfully!", ToastAndroid.SHORT);
     }
   }
 
@@ -196,7 +196,7 @@ const QuoteDetails = ({ route }) => {
           style={tw`flex-row items-center ml-4`}
           onPress={() => navigation.goBack()}
         >
-          <Entypo name='chevron-left' size={30} color='black' />
+          <Entypo name="chevron-left" size={30} color="black" />
           <Text>Back</Text>
         </TouchableOpacity>
 
@@ -208,21 +208,21 @@ const QuoteDetails = ({ route }) => {
               interstitial.show();
             }}
           >
-            <MaterialIcons name='library-add' size={26} color='black' />
+            <MaterialIcons name="library-add" size={26} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
             style={tw`flex-row items-center ml-4`}
             onPress={async () => {
               await removeFromArray(data?.item);
               await getArray();
-              ToastAndroid.show('Removed from favorites', ToastAndroid.SHORT);
+              ToastAndroid.show("Removed from favorites", ToastAndroid.SHORT);
               rewarded.show();
             }}
           >
             <MaterialCommunityIcons
-              name='book-remove-multiple'
+              name="book-remove-multiple"
               size={26}
-              color='black'
+              color="black"
             />
           </TouchableOpacity>
         </View>
@@ -232,26 +232,12 @@ const QuoteDetails = ({ route }) => {
         <View style={tw`bg-blue-100 py-3 px-3 mt-3 mx-4 rounded-md shadow-xl`}>
           <Text style={tw`text-green-900 text-xl`}>"{quote}"</Text>
         </View>
-        <Text style={tw`text-gray-400 ml-4 mt-2 capitalize`}>#{category}</Text>
+
         <Text
           style={tw`ml-4 mt-5 text-blue-900 text-base font-semibold capitalize underline`}
         >
           {author}
         </Text>
-
-        <View style={tw`mx-4 my-5 mb-6 `}>
-          <Text style={tw`text-gray-600 text-lg`}>Commentary</Text>
-          <Text style={tw`text-pink-900 text-base`}>{commentary}</Text>
-        </View>
-        <View style={tw`mb-3`}>
-          <BannerAd
-            unitId='ca-app-pub-8237514940582521/6183999893'
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-            requestOptions={{
-              requestNonPersonalizedAdsOnly: true
-            }}
-          />
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
