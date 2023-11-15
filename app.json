@@ -2,17 +2,19 @@
   "expo": {
     "name": "Islamic Mental Models",
     "slug": "QuotesApp",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 1000,
+      "checkAutomatically": "ON_LOAD",
+      "useClassicUpdates": true
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -26,7 +28,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.mubarak96.QuotesApp",
-      "versionCode": 3
+      "versionCode": 4
     },
     "plugins": ["@react-native-firebase/app"],
     "web": {

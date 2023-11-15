@@ -1,6 +1,6 @@
-import { Text, ScrollView } from 'react-native';
-import React from 'react';
-import tw from 'tailwind-react-native-classnames';
+import { Text, ScrollView } from "react-native";
+import React from "react";
+import tw from "tailwind-react-native-classnames";
 
 const AboutScreen = () => {
   return (

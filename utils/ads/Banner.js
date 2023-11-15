@@ -1,10 +1,6 @@
 import { View } from "react-native";
 import React from "react";
-import {
-  BannerAd,
-  BannerAdSize,
-  TestIds
-} from "react-native-google-mobile-ads";
+import { BannerAd, BannerAdSize } from "react-native-google-mobile-ads";
 import { useState } from "react";
 
 export const Banner = () => {
@@ -12,7 +8,7 @@ export const Banner = () => {
   return (
     <View style={{ overflow: "hidden", height: showAd ? "auto" : 0 }}>
       <BannerAd
-        unitId={TestIds.BANNER}
+        unitId="ca-app-pub-8237514940582521/6183999893"
         size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true

@@ -8,113 +8,32 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import tw from "tailwind-react-native-classnames";
-import {
-  Entypo,
-  MaterialCommunityIcons,
-  MaterialIcons
-} from "@expo/vector-icons";
-
+import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { setFavorites } from "../utils/redux/slices/quotesSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  InterstitialAd,
-  AdEventType,
-  RewardedAd,
-  RewardedAdEventType,
-  BannerAd,
-  BannerAdSize
-} from "react-native-google-mobile-ads";
-import { useState } from "react";
-
-const interstitial = InterstitialAd.createForAdRequest(
-  "ca-app-pub-8237514940582521/9356958145",
-  {
-    requestNonPersonalizedAdsOnly: true
-  }
-);
-
-const rewarded = RewardedAd.createForAdRequest(
-  "ca-app-pub-8237514940582521/2408406414",
-  {
-    requestNonPersonalizedAdsOnly: true
-  }
-);
+import * as Clipboard from "expo-clipboard";
+import InterstitialAdComponent from "../utils/ads/Interstitial";
+import { Banner } from "../utils/ads/Banner";
 
 const QuoteDetails = ({ route }) => {
   const data = route?.params;
-  const { author, category, commentary, quote } = data?.item;
+  const { author, quote } = data?.item;
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { favorites } = useSelector((state) => state.quotes);
 
-  //reward ads
-
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const unsubscribeLoaded = rewarded.addAdEventListener(
-      RewardedAdEventType.LOADED,
-      () => {
-        setLoaded(true);
-      }
-    );
-    const unsubscribeEarned = rewarded.addAdEventListener(
-      RewardedAdEventType.EARNED_REWARD,
-      (reward) => {
-        console.log("User earned reward of ", reward);
-      }
-    );
-
-    // Start loading the rewarded ad straight away
-    rewarded.load();
-
-    // Unsubscribe from events on unmount
-    return () => {
-      unsubscribeLoaded();
-      unsubscribeEarned();
-    };
-  }, []);
-
-  //interstitial ads
-
-  const [adLoaded, setAdLoaded] = useState(false);
-
-  const loadInterstitial = () => {
-    const unsubscribeLoading = interstitial.addAdEventListener(
-      AdEventType.LOADED,
-      () => {
-        setAdLoaded(true);
-      }
-    );
-
-    const unsubscribeClosed = interstitial.addAdEventListener(
-      AdEventType.CLOSED,
-      () => {
-        setAdLoaded(false);
-        interstitial.load();
-      }
-    );
-
-    interstitial.load();
-
-    return () => {
-      unsubscribeClosed();
-      unsubscribeLoading();
-    };
+  const copyToClipboard = async (_quote, _author) => {
+    await Clipboard.setStringAsync(`"${_quote}" - ${_author}`);
+    ToastAndroid.show("Copied", ToastAndroid.SHORT);
   };
-
-  useEffect(() => {
-    const unsubscribeInterstitialEvent = loadInterstitial();
-
-    return unsubscribeInterstitialEvent;
-  }, []);
 
   async function addItem(item) {
     try {
       // Get the current array from AsyncStorage
       const currentArray = await AsyncStorage.getItem("myFavorites");
+
       let array = [];
       if (currentArray) {
         // Parse the string value into a JavaScript array
@@ -122,10 +41,12 @@ const QuoteDetails = ({ route }) => {
       }
 
       // Add the new item to the array
+
       array.push(item);
 
       // Save the updated array back to AsyncStorage
       await AsyncStorage.setItem("myFavorites", JSON.stringify(array));
+      dispatch(setFavorites(array));
     } catch (error) {
       console.error(error);
     }
@@ -162,6 +83,11 @@ const QuoteDetails = ({ route }) => {
       array.splice(index, 1);
       dispatch(setFavorites(array));
 
+      ToastAndroid.show(
+        "Removed from favorites successfully!",
+        ToastAndroid.SHORT
+      );
+
       // Save the updated array back to AsyncStorage
       await AsyncStorage.setItem("myFavorites", JSON.stringify(array));
     } catch (error) {
@@ -182,10 +108,11 @@ const QuoteDetails = ({ route }) => {
       }
     }
     if (exists) {
-      ToastAndroid.show("Already exists in favorite", ToastAndroid.SHORT);
+      ToastAndroid.show("Already exists in favorites", ToastAndroid.SHORT);
     } else {
       addItem(item);
-      ToastAndroid.show("Add to favorites successfully!", ToastAndroid.SHORT);
+
+      ToastAndroid.show("Added to favorites successfully!", ToastAndroid.SHORT);
     }
   }
 
@@ -201,30 +128,25 @@ const QuoteDetails = ({ route }) => {
         </TouchableOpacity>
 
         <View style={tw`flex-row`}>
-          <TouchableOpacity
-            style={tw`flex-row items-center ml-4`}
-            onPress={async () => {
-              addFavorite(favorites, data?.item);
-              interstitial.show();
-            }}
-          >
-            <MaterialIcons name="library-add" size={26} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={tw`flex-row items-center ml-4`}
-            onPress={async () => {
-              await removeFromArray(data?.item);
-              await getArray();
-              ToastAndroid.show("Removed from favorites", ToastAndroid.SHORT);
-              rewarded.show();
-            }}
-          >
-            <MaterialCommunityIcons
-              name="book-remove-multiple"
-              size={26}
-              color="black"
-            />
-          </TouchableOpacity>
+          {favorites.some((item) => item?.id === data?.item?.id) ? (
+            <TouchableOpacity
+              onPress={() => {
+                removeFromArray(data?.item);
+                // getArray();
+              }}
+            >
+              <AntDesign name="heart" size={26} color="green" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                addFavorite(favorites, data?.item);
+                // getArray();
+              }}
+            >
+              <AntDesign name="hearto" size={26} color="black" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -238,7 +160,19 @@ const QuoteDetails = ({ route }) => {
         >
           {author}
         </Text>
+
+        <TouchableOpacity
+          style={tw`flex-row ml-3 mt-4 items-center bg-gray-700 w-20 justify-center py-1 rounded-md shadow-xl`}
+          onPress={() => copyToClipboard(quote, author)}
+          activeOpacity={0.8}
+        >
+          <Text style={tw`text-white text-base font-semibold px-2`}>Copy</Text>
+          <Ionicons name="copy" size={18} color="white" />
+        </TouchableOpacity>
+
+        <Banner />
       </ScrollView>
+      <InterstitialAdComponent />
     </SafeAreaView>
   );
 };
