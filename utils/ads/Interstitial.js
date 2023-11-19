@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  InterstitialAd,
-  AdEventType,
-  TestIds
-} from "react-native-google-mobile-ads";
+// import {
+//   InterstitialAd,
+//   AdEventType,
+//   TestIds
+// } from "react-native-google-mobile-ads";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const InterstitialAdComponent = () => {

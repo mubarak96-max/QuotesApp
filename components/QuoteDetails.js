@@ -4,7 +4,8 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  ToastAndroid
+  ToastAndroid,
+  Share
 } from "react-native";
 import React, { useEffect } from "react";
 import tw from "tailwind-react-native-classnames";
@@ -27,6 +28,25 @@ const QuoteDetails = ({ route }) => {
   const copyToClipboard = async (_quote, _author) => {
     await Clipboard.setStringAsync(`"${_quote}" - ${_author}`);
     ToastAndroid.show("Copied", ToastAndroid.SHORT);
+  };
+
+  const onShare = async (_quote, _author) => {
+    try {
+      const result = await Share.share({
+        message: `"${_quote}" - ${_author}`
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   async function addItem(item) {
@@ -161,18 +181,33 @@ const QuoteDetails = ({ route }) => {
           {author}
         </Text>
 
-        <TouchableOpacity
-          style={tw`flex-row ml-3 mt-4 items-center bg-gray-700 w-20 justify-center py-1 rounded-md shadow-xl`}
-          onPress={() => copyToClipboard(quote, author)}
-          activeOpacity={0.8}
-        >
-          <Text style={tw`text-white text-base font-semibold px-2`}>Copy</Text>
-          <Ionicons name="copy" size={18} color="white" />
-        </TouchableOpacity>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            style={tw`flex-row ml-3 mt-4 items-center bg-gray-700 w-20 justify-center py-1 rounded-md shadow-xl`}
+            onPress={() => copyToClipboard(quote, author)}
+            activeOpacity={0.8}
+          >
+            <Text style={tw`text-white text-base font-semibold px-2`}>
+              Copy
+            </Text>
+            <Ionicons name="copy" size={18} color="white" />
+          </TouchableOpacity>
 
-        <Banner />
+          <TouchableOpacity
+            style={tw`flex-row ml-3 mt-4 items-center bg-blue-700 w-20 justify-center py-1 rounded-md shadow-xl`}
+            onPress={() => onShare(quote, author)}
+            activeOpacity={0.8}
+          >
+            <Text style={tw`text-white text-base font-semibold px-2`}>
+              Share
+            </Text>
+            <Entypo name="share" size={18} color="white" />
+          </TouchableOpacity>
+        </View>
+
+        {/* <Banner /> */}
       </ScrollView>
-      <InterstitialAdComponent />
+      {/* <InterstitialAdComponent /> */}
     </SafeAreaView>
   );
 };

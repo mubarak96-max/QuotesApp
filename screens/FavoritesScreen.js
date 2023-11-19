@@ -72,7 +72,7 @@ const FavoritesScreen = () => {
           );
         })
       )}
-      <Banner />
+      {/* <Banner /> */}
     </ScrollView>
   );
 };
